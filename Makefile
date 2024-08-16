@@ -1,0 +1,8 @@
+obj-m := mod_param.o
+obj-m += mod_param_print.o
+
+all:
+	make -C /lib/modules/`uname -r`/build M=`pwd` modules
+
+clean:
+	make -C /lib/modules/`uname -r`/build M=`pwd` clean
