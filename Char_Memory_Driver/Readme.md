@@ -5,8 +5,7 @@
 3. Makefile:
    This file is used for compilation of driver.
 
-==========================================================================================================================
-
+=====================================================================================================
 - Compile the driver
 - Load the driver using $insmod command
 - Create Node using $mknod command
