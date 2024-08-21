@@ -3,6 +3,8 @@
 #include <linux/errno.h>
 #include <linux/fs.h>
 #include <linux/uaccess.h>
+//#include <linux/slab.h>
+#include <linux/cdev.h>
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Module to create device with dynamic major number");
@@ -13,7 +15,7 @@ ssize_t dynamic_write (struct file *, const char __user *, size_t, loff_t *);
 int dynamic_open (struct inode *, struct file *);
 int dynamic_release (struct inode *, struct file *);
 
-struct file_opertaions f_ops = 
+struct file_operations f_ops = 
 {
     .owner = THIS_MODULE,
     .read = dynamic_read,
@@ -43,7 +45,7 @@ int dynamic_release (struct inode *inode, struct file *flip)
 ssize_t dynamic_read (struct file *flip, char __user *buf, size_t count, loff_t *f_pos)
 {
     int result,retval;;
-    char Kbuff[] = "This is from Kernel Buffer";
+    char Kbuff[] = "This is from Kernel Buffer\n";
     printk(KERN_INFO "File : %s, Function : %s, Line = %d\n",__FILE__,__func__,__LINE__);
     printk("Driver is in read mode...!!\n");
 
@@ -84,7 +86,7 @@ ssize_t dynamic_write (struct file *flip, const char __user *buf, size_t count, 
 
     if (result == 0)
     {
-        printk(KERN_INFO "Copy data to Kernel Space to User Space\n");
+        printk(KERN_INFO "Copy data to Kernel Space from User Space\n");
         printk(KERN_INFO "The written data is of %d size \n", count);
         retval = count;    
     }
@@ -103,7 +105,7 @@ static int dynamic_module_init(void)
     int Major, Minor;
     
     /* Allocates a range of char device numbers. The major number will be chosen dynamically, and returned (along with the first minor number) in dev. Returns zero or a negative error code.*/
-    result = alloc_chrdrv_region(&Mydev,0,4,"DynamicCharDriver");
+    result = alloc_chrdev_region(&Mydev,0,4,"DynamicCharDriver");
 
     if (result < 0)
     {
@@ -132,7 +134,7 @@ static int dynamic_module_init(void)
 
 static void dynamic_module_exit(void)
 {
-    unregister_chrdrv_region(Mydev,4); /* Unregister the device numbers and the device created */
+    unregister_chrdev_region(Mydev,4); /* Unregister the device numbers and the device created */
     cdev_del(my_cdev); /* cdev_del() removes p from the system, possibly freeing the structure itself. */
 
     /*This guarantees that cdev device will no longer be able to be opened, however any cdevs already open will remain and their fops will still be callable even after cdev_del returns*/
