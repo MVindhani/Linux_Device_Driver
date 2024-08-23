@@ -7,6 +7,9 @@
 3. Makefile:
    This is makefile to compile the driver.
 
+4. Calulator_seamphore.c
+   The issue of multiple driver accessing the kernel buffer at the same time is resolve with this file by using semaphores.
+
 
    ====================================================================================================
 
