@@ -1,4 +1,5 @@
 obj-m := Calculator.o
+obj-m += Calculator_semaphore.o
 
 KERDIR = /lib/modules/`uname -r`/build
 
