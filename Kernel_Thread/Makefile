@@ -1,4 +1,4 @@
-obj-m := Kthread.obj
+obj-m := Kthread.o
 
 KERNDIR = /lib/modules/`uname -r`/build
 CUR_DIR = `pwd`

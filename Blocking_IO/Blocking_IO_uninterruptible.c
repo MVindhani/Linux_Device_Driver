@@ -1,6 +1,6 @@
 #include<linux/kernel.h>
-#include<linux/modules.h>
-#include<linix/init.h>
+#include<linux/module.h>
+#include<linux/init.h>
 #include<linux/fs.h>
 #include<linux/wait.h>
 
@@ -31,7 +31,7 @@ ssize_t sleep_write(struct file *, const char __user *, size_t, loff_t *);
 int sleep_open(struct inode *, struct file *);
 int sleep_release(struct inode *, struct file *);
 
-ssize_t sleep_read(struct file *, char __user *, size_t, loff_t *)
+ssize_t sleep_read(struct file *filp, char __user *Ubuff, size_t count, loff_t *f_offseet)
 {
     if(data_present == DATA_NOT_PRESENT)
     {
@@ -42,6 +42,7 @@ ssize_t sleep_read(struct file *, char __user *, size_t, loff_t *)
     {
         printk("Data is avaialble in the buffer...!!!\n");
     }
+    return count;
 }
 
 ssize_t sleep_write(struct file *flip, const char __user *Ubuff, size_t len, loff_t *f_offset)

@@ -1,4 +1,4 @@
-obj-m := Blocking_IO_uninterruptible.obj
+obj-m := Blocking_IO_uninterruptible.o
 
 KERNDIR = /lib/modules/`uname -r`/build
 

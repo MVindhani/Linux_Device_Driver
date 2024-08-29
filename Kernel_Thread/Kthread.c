@@ -14,7 +14,7 @@ static int my_thread_func(void *data)
 {
 
     printk(KERN_INFO "Thread is started and below are its details : \n");
-    printk("Name : %s, PID : %d, TID : %d\n", current->comm,current-->pid,current->tgid); 
+    printk("Name : %s, PID : %d, TID : %d\n", current->comm,current->pid,current->tgid); 
 
     while(1)
     {
@@ -27,6 +27,7 @@ static int my_thread_func(void *data)
             break;
 
     }
+    return 0;
 }
 
 static int my_kthread_init(void)
@@ -51,11 +52,12 @@ static int my_kthread_init(void)
     }
 
     printk(KERN_INFO " STarting the kernel thread.\n");
+    return 0;
 }
 
 static void my_kthread_exit(void)
 {
-    printl("Kernel thread is exiting.\n");
+    printk("Kernel thread is exiting.\n");
     kthread_stop(my_thread); /* It will stop the thread created by kthread_create().*/
 }
 
