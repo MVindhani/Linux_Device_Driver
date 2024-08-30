@@ -1,6 +1,6 @@
 #include<linux/kernel.h>
-#include<linux/modules.h>
-#include<linix/init.h>
+#include<linux/module.h>
+#include<linux/init.h>
 #include<linux/fs.h>
 #include<linux/wait.h>
 
@@ -10,17 +10,10 @@
 #define DATA_AVAILABLE 1
 
 int data_present = DATA_NOT_PRESENT;
-wait_queue_head my_queue; /* It is wait queue structure */
-DECLARE_WAIT_QUEUE_HEAD(my_queue) /* It is used to initialize the wait queue at compile time*/
 
-struct file_operations fops = 
-{
-    .owner = THIS_MODULE,
-    .read = sleep_read,
-    .write = sleep_write,
-    .open = sleep_open,
-    .release = sleep_release,
-};
+wait_queue_head_t my_queue; /* It is wait queue structure */
+DECLARE_WAIT_QUEUE_HEAD(my_queue); /* It is used to initialize the wait queue at compile time*/
+
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("A module to describe the uninterruptable sleep");
@@ -31,7 +24,17 @@ ssize_t sleep_write(struct file *, const char __user *, size_t, loff_t *);
 int sleep_open(struct inode *, struct file *);
 int sleep_release(struct inode *, struct file *);
 
-ssize_t sleep_read(struct file *, char __user *, size_t, loff_t *)
+struct file_operations fops =
+{
+    .owner = THIS_MODULE,
+    .read = sleep_read,
+    .write = sleep_write,
+    .open = sleep_open,
+    .release = sleep_release,
+};
+
+
+ssize_t sleep_read(struct file *filp, char __user *Ubuff, size_t count, loff_t *f_offset)
 {
     if(data_present == DATA_NOT_PRESENT)
     {
@@ -50,6 +53,7 @@ ssize_t sleep_read(struct file *, char __user *, size_t, loff_t *)
     {
         printk("Data is avaialble in the buffer...!!!\n");
     }
+	return 0;
 }
 
 ssize_t sleep_write(struct file *flip, const char __user *Ubuff, size_t len, loff_t *f_offset)
