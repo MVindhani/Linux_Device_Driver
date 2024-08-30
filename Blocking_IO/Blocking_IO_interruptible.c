@@ -11,9 +11,10 @@
 
 int data_present = DATA_NOT_PRESENT;
 
-wait_queue_head_t my_queue; /* It is wait queue structure */
-DECLARE_WAIT_QUEUE_HEAD(my_queue); /* It is used to initialize the wait queue at compile time*/
+wait_queue_head_t my_queue; /* It is wait queue structure. Declaration of wait queue. */
+DECLARE_WAIT_QUEUE_HEAD(my_queue); /* It is used to initialize the wait queue at compile time. Here, wait queue is declared statically.*/
 
+/* Here, wait queue is decalred and initialized, so now process can use the wiat queue to go to sleep. */
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("A module to describe the uninterruptable sleep");
@@ -32,7 +33,6 @@ struct file_operations fops =
     .open = sleep_open,
     .release = sleep_release,
 };
-
 
 ssize_t sleep_read(struct file *filp, char __user *Ubuff, size_t count, loff_t *f_offset)
 {
