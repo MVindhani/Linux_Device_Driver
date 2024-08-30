@@ -5,6 +5,7 @@
 #include"Shared_var.h"
 
 #define NAME "Shared_Var"
+#define UNITERRUPTIBLE /*remove this macro to compile it with interruptible semaphore*/
 
 struct semaphore new_semaphore;
 
@@ -14,9 +15,17 @@ MODULE_AUTHOR("Malik Vindhani");
 
 static int get_semaphore(void)
 {
-    down(&new_semaphore); /* Decreament the semaphore count value and lock it.*/
+    #ifdef UNITERRUPTIBLE
+    down(&new_semaphore); /* Decreament the semaphore count value and lock it. It is uninterruptable and hence try to avoid using down().*/
     printk(KERN_INFO "Semaphore is locked...!!\n");
     return 0;
+    #else
+    int ret;
+    ret = down_interruptaible(&new); /* Decreament the semaphore count value and lock it. It is interruptable and hence try to use down_interruptible().*/
+    printk(KERN_INFO "Semaphore is locked...!!\n");
+    return ret;
+    #endif
+
 }
 
 static void leave_semaphore(void)
