@@ -52,13 +52,11 @@ static void interrupt_one_exit(void)
 {
     printk("Device is unloaded..!!!\n");
     free_irq(NUMBER_OF_INTERRUPT,&id);
-
     /*
     void free_irq(unsigned int irq, void * dev_id);
         irq = Interrupt Number,
         dev_id = device ID. 
     */
-
 }
 
 module_init(interrupt_one_init);
