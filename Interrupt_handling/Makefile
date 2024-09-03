@@ -1,4 +1,5 @@
 obj-m := Interrupt_1.o
+obj-m += Interrupt_tasklet.o
 
 KERNDIR = /lib/modules/`uname -r`/build
 
